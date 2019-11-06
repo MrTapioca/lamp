@@ -1,0 +1,21 @@
+﻿.groups {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    grid-column-gap: 10px;
+    grid-row-gap: 10px;
+}
+
+.group-name {
+    display: flex;
+    align-items: center;
+}
+
+.group-button {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+    .group-button .btn {
+        
+    }

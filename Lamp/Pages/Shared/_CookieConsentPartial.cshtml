@@ -1,0 +1,57 @@
+﻿@using Microsoft.AspNetCore.Http.Features
+
+@{
+    var consentFeature = Context.Features.Get<ITrackingConsentFeature>();
+    var showBanner = !consentFeature?.CanTrack ?? false;
+    var cookieString = consentFeature?.CreateConsentCookie();
+}
+
+@if (showBanner)
+{
+    <nav id="cookieConsent" class="navbar navbar-fixed-top bg-primary text-primary" role="alert">
+        <div class="container">
+            @*<div class="navbar-header">
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#cookieConsent .navbar-collapse">
+                        <span class="sr-only">Toggle cookie consent banner</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <span class="navbar-brand"><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></span>
+                    <span class="navbar-brand">Cookie consent</span>
+                </div>*@
+            @*<div class="collapse navbar-collapse in">
+                </div>*@
+            <table style="display: inline-table">
+                <tr>
+                    <td><span class="glyphicon glyphicon-info-sign" aria-hidden="true"></span></td>
+                    <td style="padding-left: 15px">
+                        <p class="navbar-text" style="font-size: .85em">
+                            Cookies are required for this web application to work correctly.
+                            They are only used within this website and are not shared with third parties.
+                            <b>Please accept the use of cookies to continue.</b>
+                        </p>
+                    </td>
+                </tr>
+            </table>
+            <table style="display: inline-table">
+                <tr>
+                    <td>
+                        @*<a asp-page="/Privacy" class="btn btn-primary navbar-btn btn-sm">Learn More</a>*@
+                    </td>
+                    <td style="padding-left: 10px">
+                        <button type="button" class="btn btn-default navbar-btn btn-sm" data-cookie-string="@cookieString">Accept</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </nav>
+    <script>
+        (function () {
+            document.querySelector("#cookieConsent button[data-cookie-string]").addEventListener("click", function (el) {
+                document.cookie = el.target.dataset.cookieString;
+                document.querySelector("#cookieConsent").classList.add("hidden");
+            }, false);
+        })();
+    </script>
+}

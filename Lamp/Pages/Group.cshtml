@@ -1,0 +1,230 @@
+﻿@page "{groupId}"
+@model Lamp.Pages.GroupModel
+@{
+    ViewData["Title"] = "Manage group";
+}
+@section HeadScripts {
+    <link rel="stylesheet" href="~/css/group.css" />
+}
+
+<partial name="_StatusMessage"
+         model="new Lamp.ViewModels.StatusMessage(Model.StatusMessageType, Model.StatusMessage)" />
+<partial name="_Alert" />
+
+<div class="row">
+    <div class="col-sm-6 col-lg-4">
+
+        <h3>@Model.GroupName</h3>
+
+        @* Group code *@
+        <div>
+            <strong style="margin-right: 5px">Group code:</strong>
+            <code id="group-code" style="margin-right: 5px">@Model.GroupId</code>
+            <a class="btn btn-default btn-sm" style="margin-right: 5px" onclick="copyToClipboard('#group-code')">Copy</a>
+            <a class="btn btn-primary btn-sm"
+               href="mailto:?subject=@Model.EmailLink.Subject&body=@Model.EmailLink.Body">Send</a>
+        </div>
+
+    </div>
+
+    <div class="col-sm-6 col-lg-4">
+        <h3>Settings</h3>
+
+        @* Settings *@
+        <form method="post" asp-page-handler="Settings">
+            <div class="form-group">
+                <label asp-for="UsersCanScheduleOthers">Scheduling permissions</label>
+                <div class="radio">
+                    <label>
+                        <input type="radio" asp-for="UsersCanScheduleOthers" value="true"
+                               onchange="this.form.submit()" />
+                        Users can schedule themselves and others
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" asp-for="UsersCanScheduleOthers" value="false"
+                               onchange="this.form.submit()" />
+                        Users can only schedule themselves
+                    </label>
+                </div>
+            </div>
+            @*<button type="submit" class="btn btn-primary btn-sm">Save settings</button>*@
+        </form>
+
+    </div>
+
+    <div class="col-sm-6 col-lg-4">
+        <h3>Locations</h3>
+
+        @* Locations *@
+        <div class="panel">
+            <div class="panel-body">
+                <form method="post" asp-page-handler="Location">
+                    <div class="locations">
+                        @foreach (var location in Model.Locations)
+                        {
+                            <div>@location.Name</div>
+                            <div class="location-button">
+                                <button type="button" class="btn btn-danger btn-sm"
+                                        onclick="confirmRemoveLocation('@location.Id', '@location.Name')">
+                                    Remove
+                                </button>
+                            </div>
+                        }
+
+                        <input type="text" name="newLocation" />
+                        <button type="submit" class="btn btn-primary btn-sm">Add</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xs-12">
+        <h3>Members</h3>
+
+        <div class="row">
+            @{
+                if (Model.Members.Any(m => m.Approved == false))
+                {
+                    <div class="col-sm-6 col-lg-4">
+
+                        @* Members awaiting approval *@
+                        <div class="panel panel-danger">
+                            <div class="panel-heading">
+                                <b class="panel-title">Awaiting approval</b>
+                            </div>
+
+                            <div class="panel-body">
+                                <div class="members">
+                                    @{
+                                        foreach (var member in Model.Members.Where(m => m.Approved == false))
+                                        {
+                                            <div>@member.Name</div>
+                                            <div class="member-option">
+                                                <form method="post" asp-page-handler="Approve" asp-route-memberId="@member.Id">
+                                                    <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                                                </form>
+                                            </div>
+                                            <div class="member-option">
+                                                <button class="btn btn-danger btn-sm"
+                                                        onclick="confirmReject('@member.Id', '@member.Name')">
+                                                    Reject
+                                                </button>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                }
+            }
+
+            <div class="col-sm-6 col-lg-4">
+
+                @* All members *@
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <b class="panel-title">All members</b>
+                    </div>
+                    <div class="panel-body">
+                        <div class="members">
+                            @{
+                                foreach (var member in Model.Members.Where(m => m.Approved))
+                                {
+                                    <div>@member.Name</div>
+                                    <div class="member-option">
+                                        <form method="post" asp-page-handler="Role">
+                                            <select asp-items="Model.Roles" asp-for="@(member.Role)"
+                                                    class="form-control input-sm"
+                                                    onchange="changeRole('@member.Id', '@member.Name', this.value, this.form)"></select>
+                                        </form>
+                                    </div>
+                                    <div class="member-option">
+                                        <button class="btn btn-danger btn-sm"
+                                                onclick="confirmRemove('@member.Id', '@member.Name')">
+                                            Remove
+                                        </button>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@* Modal component shown when requesting to remove a location *@
+<div class="modal fade" id="remove-location-modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Remove location</h4>
+            </div>
+            <div class="modal-body">
+                <p><b>All the shifts belonging to this location will be lost.</b></p>
+                <p>Do you really want to remove the <b><span data-location-name></span></b> location?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+                <form method="post" asp-page-handler="RemoveLocation">
+                    <input type="hidden" data-location-id name="locationId" />
+                    <button type="submit" class="btn btn-danger">Yes, remove</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Modal component shown when requesting to remove a member *@
+<div class="modal fade" id="remove-modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Remove member</h4>
+            </div>
+            <div class="modal-body">
+                <p>Do you really want to remove <b><span data-member-name></span></b> from this group?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+                <form method="post" asp-page-handler="Remove">
+                    <input type="hidden" data-member-id name="memberId" />
+                    <button type="submit" class="btn btn-danger">Yes, remove</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Modal component shown when requesting to reject a member *@
+<div class="modal fade" id="reject-modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Reject user</h4>
+            </div>
+            <div class="modal-body">
+                <p>Do you really want to reject <b><span data-member-name></span></b> from joining this group?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+                <form method="post" asp-page-handler="Reject">
+                    <input type="hidden" data-member-id name="memberId" />
+                    <button type="submit" class="btn btn-danger">Yes, remove</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/group.js"></script>
+}

@@ -1,0 +1,193 @@
+﻿@page
+@model CalendarModel
+@{
+    ViewData["Title"] = "Calendar";
+}
+
+<div class="row top-buffer"></div>
+
+<div id="page-container">
+    <div id="calendar-page">
+
+        <div class="row">
+            <div class="col-sm-6 form-group">
+                <label>Group</label>
+                @if (Model.GroupList.Count == 0)
+                {
+                    <div>You do not belong to any group.</div>
+                }
+                else
+                {
+                    <select asp-items="Model.GroupList" asp-for="SelectedGroupId" class="form-control" id="group"
+                            onchange="setGroup(this.value)"></select>
+                }
+            </div>
+
+            <div class="col-sm-6 form-group">
+                <label for="location">Location</label>
+                @if (Model.LocationList.Count == 0)
+                {
+                    <div>This group has no locations.</div>
+                }
+                else
+                {
+                    <select asp-items="Model.LocationList" asp-for="SelectedLcationId" class="form-control" id="location"
+                            onchange="setLocation(this.value)"></select>
+                }
+            </div>
+        </div>
+
+        @if (Model.SelectedLcationId > 0)
+        {
+            @if (Model.SelectedGroupManager)
+            {
+                <div class="row" style="margin-bottom: 10px">
+                    <div class="col-md-12">
+                        <div class="dropdown pull-right">
+                            <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                                Manage Shifts
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="javascript:createShift()"><span class="far fa-plus-square"></span>Create</a></li>
+                                <li><a href="#"><span class="far fa-clone"></span>Copy</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#"><span class="far fa-check-circle"></span>Enable</a></li>
+                                <li><a href="#"><span class="far fa-times-circle"></span>Disable</a></li>
+                                <li class="divider"></li>
+                                <li><a href="#"><span class="far fa-trash-alt"></span>Delete</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div id="loading-animation" class="sk-circle" hidden>
+                        <div class="sk-circle1 sk-child"></div>
+                        <div class="sk-circle2 sk-child"></div>
+                        <div class="sk-circle3 sk-child"></div>
+                        <div class="sk-circle4 sk-child"></div>
+                        <div class="sk-circle5 sk-child"></div>
+                        <div class="sk-circle6 sk-child"></div>
+                        <div class="sk-circle7 sk-child"></div>
+                        <div class="sk-circle8 sk-child"></div>
+                        <div class="sk-circle9 sk-child"></div>
+                        <div class="sk-circle10 sk-child"></div>
+                        <div class="sk-circle11 sk-child"></div>
+                        <div class="sk-circle12 sk-child"></div>
+                    </div>
+
+                    <div id="calendar"></div>
+
+                    <div class="legend" style="margin-top: 10px">
+                        <span class="label label-info">Empty</span>
+                        <span class="label label-danger">Incomplete</span>
+                        <span class="label label-warning">Complete</span>
+                        <span class="label label-success">Full</span>
+                        @if (Model.SelectedGroupManager)
+                        {
+                            <span class="label label-default">Disabled</span>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div id="date-page" hidden>
+        <div class="row">
+            <div class="col-md-12">
+                <button id="date-back-button" class="btn btn-primary">
+                    <span class="fas fa-angle-left"></span>
+                    <span>Back to calendar</span>
+                </button>
+            </div>
+
+            <div class="col-md-12">
+                <h3 id="date-selected"></h3>
+            </div>
+
+            <div class="col-md-6">
+                <div id="date-loading-animation" class="sk-circle">
+                    <div class="sk-circle1 sk-child"></div>
+                    <div class="sk-circle2 sk-child"></div>
+                    <div class="sk-circle3 sk-child"></div>
+                    <div class="sk-circle4 sk-child"></div>
+                    <div class="sk-circle5 sk-child"></div>
+                    <div class="sk-circle6 sk-child"></div>
+                    <div class="sk-circle7 sk-child"></div>
+                    <div class="sk-circle8 sk-child"></div>
+                    <div class="sk-circle9 sk-child"></div>
+                    <div class="sk-circle10 sk-child"></div>
+                    <div class="sk-circle11 sk-child"></div>
+                    <div class="sk-circle12 sk-child"></div>
+                </div>
+                <div id="date-content" hidden></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@* Confirmation modal *@
+<div class="modal fade" id="confirmation-modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" id="confirmation-title"></h4>
+            </div>
+            <div class="modal-body" id="confirmation-body">
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+                <form method="post" asp-controller="">
+                    <button type="button" id="confirmation-button" class="btn btn-danger" data-dismiss="modal"></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.SelectedGroupManager)
+{
+    <partial name="_CreateShiftModalPartial" model="new ShiftVM()" />
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <link href="~/lib/fullcalendar/core/main.min.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/fullcalendar/daygrid/main.min.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/fullcalendar/bootstrap/main.min.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/jqueryui/jquery-ui.min.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/selectize.js/css/selectize.min.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/selectize.js/css/selectize.bootstrap3.min.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/lib/bootstrap-toggle/css/bootstrap-toggle.min.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/sk-circle.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/calendar.css" rel="stylesheet" asp-append-version="true" />
+    <link href="~/css/shifts.css" rel="stylesheet" asp-append-version="true" />
+
+    <script src="~/lib/js-cookie/js.cookie.min.js" asp-append-version="true"></script>
+    <script src="~/lib/moment.js/moment.min.js" asp-append-version="true"></script>
+    <script src="~/lib/fullcalendar/core/main.min.js" asp-append-version="true"></script>
+    <script src="~/lib/fullcalendar/daygrid/main.min.js" asp-append-version="true"></script>
+    <script src="~/lib/fullcalendar/bootstrap/main.min.js" asp-append-version="true"></script>
+    <script src="~/lib/fullcalendar/interaction/main.min.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js" asp-append-version="true"></script>
+    <script src="~/lib/jqueryui/jquery-ui.min.js" asp-append-version="true"></script>
+    <script src="~/lib/selectize.js/js/standalone/selectize.min.js" asp-append-version="true"></script>
+    <script src="~/lib/bootstrap-toggle/js/bootstrap-toggle.min.js" asp-append-version="true"></script>
+    <script src="~/js/calendar.js" asp-append-version="true"></script>
+    <script src="~/js/shifts.js" asp-append-version="true"></script>
+
+    @if (Model.SelectedGroupManager)
+    {
+        <script src="~/js/calendarManage.js" asp-append-version="true"></script>
+        <script src="~/js/shiftsManage.js" asp-append-version="true"></script>
+        <script src="~/js/clearFormUnobtrusive.js" asp-append-version="true"></script>
+    }
+}

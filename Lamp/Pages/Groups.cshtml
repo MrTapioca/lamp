@@ -1,0 +1,111 @@
+﻿@page
+@model GroupsModel
+@{
+    ViewData["Title"] = "Groups";
+}
+@section HeadScripts {
+    <link rel="stylesheet" href="~/css/groups.css" />
+}
+
+<partial name="_StatusMessage"
+         model="new Lamp.ViewModels.StatusMessage(Model.MessageType, Model.Message)" />
+<div class="row">
+    <div class="col-sm-4">
+
+        <h3>My Groups</h3>
+
+        <div class="groups">
+            @{
+                if (Model.JoinedGroups.Count() > 0)
+                {
+                    foreach (var group in Model.JoinedGroups)
+                    {
+                        <div class="group-name">@group.Name</div>
+                        if (group.CanManage)
+                        {
+                            <div class="group-button">
+                                <a class="btn btn-default btn-sm"
+                                   asp-page="/Group" asp-route-groupId="@(group.Id)">Manage</a>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="group-button"></div>
+                        }
+                        <div class="group-button">
+                            <a class="btn btn-danger btn-sm" data-leave-button
+                               data-group-id="@(group.Id)" data-group-name="@(group.Name)">Leave</a>
+                        </div>
+                    }
+                }
+                else
+                {
+                    <span class="text-muted">No joined groups</span>
+                }
+            }
+        </div>
+
+    </div>
+
+    <div class="col-sm-4">
+
+        <h3>Join a group</h3>
+
+        <form method="post" asp-page-handler="Join">
+            <div class="form-group">
+                <label asp-for="Input.JoinGroupCode"></label>
+                <input asp-for="Input.JoinGroupCode" class="form-control" />
+                <span asp-validation-for="Input.JoinGroupCode" class="text-danger"></span>
+            </div>
+            <input asp-for="Input.CreateGroupName" type="hidden" value="0" />
+            <input asp-for="Input.LeaveGroupCode" type="hidden" value="0" />
+            <button type="submit" class="btn btn-primary btn-sm">Join</button>
+        </form>
+
+    </div>
+
+    <div class="col-sm-4">
+
+        <h3>Create a group</h3>
+
+        <form method="post" asp-page-handler="Create">
+            <div class="form-group">
+                <label asp-for="Input.CreateGroupName"></label>
+                <input asp-for="Input.CreateGroupName" class="form-control" />
+                <span asp-validation-for="Input.CreateGroupName" class="text-danger"></span>
+            </div>
+            <input asp-for="Input.JoinGroupCode" type="hidden" value="0" id="" />
+            <input asp-for="Input.LeaveGroupCode" type="hidden" value="0" id="" />
+            <button type="submit" class="btn btn-primary btn-sm">Create</button>
+        </form>
+
+    </div>
+</div>
+
+@* Modal component shown when requesting to leave a group *@
+<div class="modal fade" id="leave-modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">My Groups</h4>
+            </div>
+            <div class="modal-body">
+                <p>Do you really want to leave the group <b><span id="leave-group-name"></span></b>?</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+                <form method="post" asp-page-handler="Leave">
+                    <input asp-for="Input.JoinGroupCode" type="hidden" value="0" id="" />
+                    <input asp-for="Input.CreateGroupName" type="hidden" value="0" id="" />
+                    <input asp-for="Input.LeaveGroupCode" type="hidden" id="leave-group-code" />
+                    <button type="submit" class="btn btn-danger">Yes, leave</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="~/js/groups.js"></script>
+}

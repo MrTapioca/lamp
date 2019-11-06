@@ -1,0 +1,10 @@
+﻿@using Lamp.ViewModels
+@model StatusMessage
+
+@if (!string.IsNullOrEmpty(Model.Message))
+{
+    <div class="alert alert-@Model.Type alert-dismissible" role="alert">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        @Html.Raw(Model.Message)
+    </div>
+}

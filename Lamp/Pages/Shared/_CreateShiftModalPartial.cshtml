@@ -1,0 +1,193 @@
+﻿@using Lamp.ViewModels
+@model ShiftVM
+
+<div class="modal fade"
+     id="create-shift-modal" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form method="post" asp-controller="">
+
+                <input type="hidden" asp-for="LocationId" value="0" data-location-id />
+                <input type="hidden" asp-for="ShiftId" value="0" data-shift-id />
+
+                <div class="modal-header">
+                    <h4 class="modal-title">...</h4>
+                </div>
+                <div class="modal-body">
+
+                    <div class="panel panel-primary">
+
+                        <div class="panel-heading">
+                            <h1 class="panel-title">Shift setup</h1>
+                        </div>
+
+                        <div class="panel-body">
+
+                            <div class="form-group">
+                                <label asp-for="Start"></label>
+                                <div class="input-group date" data-picker-start>
+                                    <input type="text" asp-for="Start" value="" class="form-control"
+                                           readonly data-start />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                                <span asp-validation-for="Start" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="End"></label>
+                                <span data-shift-duration></span>
+                                <div class="input-group date" data-picker-end>
+                                    <input type="text" asp-for="End" value="" class="form-control"
+                                           readonly data-end />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                                <span asp-validation-for="End" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="MinParticipants"></label>
+                                <div class="input-group number-spinner">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" data-dir="dwn">
+                                            <span class="glyphicon glyphicon-minus"></span>
+                                        </button>
+                                    </span>
+                                    <input asp-for="MinParticipants" value="2"
+                                           class="form-control text-center" data-min-participants>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" data-dir="up">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span asp-validation-for="MinParticipants" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="MaxParticipants"></label>
+                                <div class="input-group number-spinner">
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" data-dir="dwn">
+                                            <span class="glyphicon glyphicon-minus"></span>
+                                        </button>
+                                    </span>
+                                    <input asp-for="MaxParticipants" value="4"
+                                           class="form-control text-center" data-max-participants>
+                                    <span class="input-group-btn">
+                                        <button type="button" class="btn btn-default" data-dir="up">
+                                            <span class="glyphicon glyphicon-plus"></span>
+                                        </button>
+                                    </span>
+                                </div>
+                                <span asp-validation-for="MaxParticipants" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="Instructions"></label>
+                                <textarea asp-for="Instructions" class="form-control"
+                                          style="resize:vertical" data-instructions></textarea>
+                            </div>
+
+                            <div class="checkbox" data-enable-shift>
+                                <label>
+                                    <input type="checkbox" asp-for="Enabled" />
+                                    Enable shift right away
+                                </label>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <div class="panel panel-primary" data-copies-panel>
+
+                        <div class="panel-heading">
+                            <div style="display: flex; justify-content: space-between; align-items: center">
+                                <h1 class="panel-title">Create on multiple days</h1>
+                                <input type="checkbox" data-toggle="toggle" data-size="mini" data-width="50"
+                                       data-on="Yes" data-off="No" data-onstyle="success"
+                                       data-copies-toggle asp-for="CreateCopies" />
+                            </div>
+                        </div>
+
+                        <div class="panel-body collapse" data-copies-panel-body>
+                            <div class="form-group">
+                                <label>Create every...</label>
+
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" asp-for="CopyMonday" />
+                                                Monday
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" asp-for="CopyTuesday" />
+                                                Tuesday
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" asp-for="CopyWednesday" />
+                                                Wednesday
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" asp-for="CopyThursday" />
+                                                Thursday
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" asp-for="CopyFriday" />
+                                                Friday
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" asp-for="CopySaturday" />
+                                                Saturday
+                                            </label>
+                                        </div>
+                                        <div>
+                                            <label class="checkbox-inline">
+                                                <input type="checkbox" asp-for="CopySunday" />
+                                                Sunday
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+                                <label>Create through</label>
+                                <div class="input-group date" data-picker-copy-until>
+                                    <input type="text" asp-for="CopyUntil" value=""
+                                           class="form-control" readonly data-copy-until />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default pull-left" data-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" data-submit>...</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>

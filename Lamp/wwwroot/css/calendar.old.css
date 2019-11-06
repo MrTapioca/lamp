@@ -1,0 +1,31 @@
+﻿.fc-left h2 {
+    font-size: 24px;
+}
+
+@media only screen and (max-width: 767px) {
+    .fc-day-number {
+        font-size: .8em;
+    }
+
+    .fc-event {
+        font-size: .7em;
+    }
+}
+
+.empty {
+    background-color: #90caf9;
+    border-color: #90caf9;
+    color: black;
+}
+
+.incomplete {
+    background-color: #b39ddb;
+    border-color: #b39ddb;
+    color: black;
+}
+
+.full {
+    background-color: #ef9a9a;
+    border-color: #ef9a9a;
+    color: black;
+}

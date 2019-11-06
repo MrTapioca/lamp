@@ -1,0 +1,224 @@
+﻿/* Shift card layout */
+
+.shift-container {
+    border: 1px solid #9e9e9e;
+    border-radius: 5px;
+    padding: 5px 10px;
+    box-shadow: 2px 2px 3px #9e9e9e;
+    background-color: white;
+}
+
+    .shift-container + .shift-container {
+        margin: 15px 0 0 0;
+    }
+
+.shift-top {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-column-gap: 5px;
+}
+
+.shift-upperleft {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+    .shift-upperleft > * {
+        margin-right: 10px
+    }
+
+.shift-upperright {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-direction: row-reverse;
+}
+
+    .shift-upperright > * {
+        margin-left: 10px
+    }
+
+.shift-divider {
+    height: 1px;
+    margin: 5px -5px 10px -5px;
+    background-color: #9e9e9e;
+}
+
+.shift-spots {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+}
+
+.shift-spot {
+    /*width: 100%;*/
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin: 5px;
+    box-shadow: 0 0 0 2px #999999 inset;
+    /*border-radius: 500px 150px 150px 500px;*/
+    border-radius: 5px;
+    /*height: 50px;*/
+}
+
+.shift-spot button {
+    /*border: none;*/
+    /*background-color: none;*/
+    margin: 0 10px 0 0;
+    /*padding-right: 4px;*/
+    /*padding-left: 4px;*/
+}
+
+.shift-add-button {
+    border: none;
+    box-shadow: none;
+    width: 100%;
+}
+
+@media (min-width: 576px) {
+    .shift-add-button {
+        width: unset;
+    }
+}
+
+.shift-profile {
+    width: 50px;
+    height: 50px;
+    background-color: #dddddd;
+    /*border-radius: 50%;*/
+    border-radius: 5px 0 0 5px;
+    border: 2px solid #999999;
+    margin: 0 5px 0 0;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+}
+
+.shift-profile-empty {
+    background-color: unset;
+    color: #666666;
+}
+
+.shift-profile-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin: 0 10px 0 0;
+    /*margin-left: auto;*/
+    /*margin-right: 10px;*/
+}
+
+/* Participant list */
+
+.participant-list-item {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 5px 0;
+}
+
+.participant-selected {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.participant-profile {
+    width: 30px;
+    height: 30px;
+    background-color: #dddddd;
+    border-radius: 50%;
+    border: 1px solid #999999;
+    margin: 0 5px 0 5px;
+    background-size: cover;
+    background-position: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+
+.participant-profile-selected {
+    width: 20px;
+    height: 20px;
+    font-size: 11px;
+    margin-left: 0;
+}
+
+.participant-profile-name {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /*margin: 0 10px 0 0;*/
+}
+
+.participant-form {
+    display: flex;
+    align-items: stretch;
+}
+
+    .participant-form > button {
+        margin-left: 10px;
+        margin-bottom: 6px;
+    }
+
+/*.selectize-dropdown {
+    z-index: 99999 !important;
+    position: absolute !important;
+}*/
+
+/* Shift card colors */
+.shift-container.color-disabled {
+    border-color: #2196f3;
+    background-color: #e3f2fd;
+}
+
+.shift-container.color-empty {
+    border-color: #2196f3;
+    background-color: #e3f2fd;
+}
+
+.shift-container.color-incomplete {
+    border-color: #673ab7;
+    background-color: #ede7f6;
+}
+
+.shift-container.color-complete {
+    border-color: #616161;
+    background-color: #eeeeee;
+}
+
+.shift-container.color-open {
+    border-color: #2196f3;
+    background-color: #e3f2fd;
+}
+
+.selectize-control::before {
+    -moz-transition: opacity 0.2s;
+    -webkit-transition: opacity 0.2s;
+    transition: opacity 0.2s;
+    content: ' ';
+    z-index: 2;
+    position: absolute;
+    display: block;
+    top: 6px;
+    right: 36px;
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    content: "\f110";
+    opacity: 0;
+    -webkit-animation: none;
+    animation: none;
+}
+
+.selectize-control.loading::before {
+    opacity: 1;
+    -webkit-animation: fa-spin 2s infinite linear;
+    animation: fa-spin 2s infinite linear;
+}

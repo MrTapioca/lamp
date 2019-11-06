@@ -1,0 +1,41 @@
+﻿code {
+    border: 1px solid #616161;
+    border-radius: 3px;
+    padding: 4px 8px;
+}
+
+.members {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    grid-row-gap: 10px;
+    grid-column-gap: 5px;
+    align-items: center;
+}
+
+.member-option {
+    display: flex;
+    justify-content: flex-end;
+}
+
+    .member-option button {
+        padding-left: 5px;
+        padding-right: 5px;
+    }
+
+.locations {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-row-gap: 10px;
+    grid-column-gap: 5px;
+    align-items: center;
+}
+
+.location-button {
+    display: flex;
+    justify-content: flex-end;
+}
+
+    .location-button button {
+        padding-left: 5px;
+        padding-right: 5px;
+    }

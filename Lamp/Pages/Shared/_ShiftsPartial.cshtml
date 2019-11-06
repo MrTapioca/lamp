@@ -1,0 +1,115 @@
+﻿@using Lamp.Data
+@model IEnumerable<Shift>
+
+@foreach (var shift in Model)
+{
+    <div class="shift-container" data-shift-id="@(shift.Id)">
+
+        @if (ViewBag.ShowManageButton)
+        {
+            <div data-shift-data
+                 data-shift-id="@shift.Id"
+                 data-start="@shift.Start"
+                 data-end="@shift.End"
+                 data-min-participants="@shift.MinParticipants"
+                 data-max-participants="@shift.MaxParticipants"
+                 data-instructions="@shift.Instructions"></div>
+        }
+
+        <div class="shift-top">
+            <div class="shift-upperleft">
+                <b>
+                    @shift.Start.ToShortTimeString()
+                    @if (shift.End != shift.Start)
+                    {
+                        <text>- </text>
+                        if (shift.End.Date != shift.Start.Date)
+                        {
+                            @shift.End.ToShortDateString() <text> </text>
+                        }
+                        @shift.End.ToShortTimeString()
+                    }
+                </b>
+                <span>@shift.Location.Name</span>
+            </div>
+
+            <div class="shift-upperright">
+                @if (ViewBag.ShowManageButton)
+                {
+                    <div class="dropdown">
+                        <button type="button" class="btn btn-sm btn-default dropdown-toggle" data-toggle="dropdown">
+                            <span class="fas fa-cog"></span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-right">
+                            <li>
+                                @if (shift.Enabled)
+                                {
+                                    <a href="javascript:enableShift(@shift.Id, false)"><span class="far fa-times-circle"></span>Disable</a>
+                                }
+                                else
+                                {
+                                    <a href="javascript:enableShift(@shift.Id, true)"><span class="far fa-check-circle"></span>Enable</a>
+                                }
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="javascript:void(0)"><span class="far fa-clone"></span>Copy</a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a href="javascript:editShift(@shift.Id)"><span class="far fa-edit"></span>Edit</a>
+                            </li>
+                            <li>
+                                <a href="javascript:deleteShift(@shift.Id)"><span class="far fa-trash-alt"></span>Delete</a>
+                            </li>
+                        </ul>
+                    </div>
+                }
+
+                @switch (shift.GetShiftStatus())
+                {
+                    case ShiftStatus.Empty:
+                        <span class="label label-info">Empty</span>
+                        break;
+                    case ShiftStatus.Incomplete:
+                        <span class="label label-danger">Incomplete</span>
+                        break;
+                    case ShiftStatus.Complete:
+                        <span class="label label-warning">Complete</span>
+                        break;
+                    case ShiftStatus.Full:
+                        <span class="label label-success">Full</span>
+                        break;
+                    case ShiftStatus.Disabled:
+                        <span class="label label-default">Disabled</span>
+                        break;
+                }
+            </div>
+        </div>
+
+        <div class="shift-divider"></div>
+
+        <div class="shift-spots">
+
+            @foreach (Participant participant in shift.Participants)
+            {
+                <div class="shift-spot">
+                    <span class="shift-profile">@participant.Member.User.Initials</span>
+                    <span class="shift-profile-name">@participant.Member.User.FullName</span>
+
+                    <button type="button" class="btn btn-sm btn-default" data-participant-id="@(participant.Id)">
+                        <span class="far fa-trash-alt"></span>
+                    </button>
+                </div>
+            }
+
+        </div>
+
+        <form method="post" asp-controller="" class="participant-form" data-shift-id="@(shift.Id)">
+            <input type="hidden" name="shiftId" value="@shift.Id" />
+            <input type="text" name="memberId" class="form-control" placeholder="Select..." />
+            <button type="button" class="btn btn-primary">Join</button>
+        </form>
+
+    </div>
+}

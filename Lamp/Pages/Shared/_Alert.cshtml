@@ -1,0 +1,55 @@
+﻿<div class="modal fade in" id="alert-modal" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-body alert alert-danger" style="margin: 0px">
+                <p data-message>
+                    Test
+                </p>
+                <p class="text-right">
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Ok</button>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<div class="modal fade in" id="alert-modal" role="dialog" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header alert alert-danger" style="margin: 0px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px;">
+            </div>
+            <div class="modal-body">
+                <p data-message>
+                    Test
+                </p>
+                <p class="text-right">
+                    <button type="button" class="btn btn-sm btn-danger" data-dismiss="modal">Ok</button>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+<script>
+    function showModalAlert(message, type, reloadOnClose) {
+        var $modal = $('#alert-modal');
+
+        $modal.find('[data-message]').html(message);
+
+        $modal.find('div.alert')
+            .removeClass('alert-success alert-info alert-warning alert-danger')
+            .addClass('alert-' + type);
+
+        $modal.find('button')
+            .removeClass('btn-success btn-info btn-warning btn-danger')
+            .addClass('btn-' + type);
+
+        if (reloadOnClose === true) {
+            $modal.on('hidden.bs.modal', function () {
+                location.reload();
+            });
+        }
+
+        $modal.modal();
+    }
+</script>

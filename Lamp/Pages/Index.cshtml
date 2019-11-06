@@ -1,0 +1,121 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home";
+}
+@section HeadScripts {
+    <link rel="stylesheet" href="~/css/shifts.css" />
+}
+
+<h3>My Shifts</h3>
+
+<div class="row">
+    <div class="col-sm-6 col-md-4">
+        <h4>@DateTime.Now.ToString("D")</h4>
+
+        @*<div class="shift-container color-incomplete">
+
+            <div class="shift-upperleft">
+                <b>7:30a - 9:15a</b>
+            </div>
+
+            <div class="shift-upperright">
+                Bonnie Brook
+            </div>
+
+            <div class="shift-divider color-incomplete"></div>
+
+            <div class="shift-spots">
+
+                <div class="shift-spot">
+                    <button type="button" class="shift-profile color-incomplete" style="background-image: url(/images/Natan-small.jpg)"></button>
+                    <span class="shift-profile-name">Natan Tapia</span>
+                </div>
+
+                <div class="shift-spot">
+                    <button type="button" class="shift-profile color-incomplete">+</button>
+                    <span class="shift-profile-name"></span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="shift-container color-complete">
+
+            <div class="shift-upperleft">
+                <b>10:00a - 12:00p</b>
+            </div>
+
+            <div class="shift-upperright">
+                Bonnie Brook
+            </div>
+
+            <div class="shift-divider color-complete"></div>
+
+            <div class="shift-spots">
+
+                <div class="shift-spot">
+                    <button type="button" class="shift-profile color-complete" style="background-image: url(/images/Natan-small.jpg)"></button>
+                    <span class="shift-profile-name">Natan Tapia</span>
+                </div>
+
+                <div class="shift-spot">
+                    <button type="button" class="shift-profile color-complete" style="background-image: url(/images/Emily.jpg)"></button>
+                    <span class="shift-profile-name">Emily Tapia</span>
+                </div>
+
+                <div class="shift-spot">
+                    <button type="button" class="shift-profile shift-profile-nopic color-complete" style="background-color: #009688">WF</button>
+                    <span class="shift-profile-name">Wesley Figueroa</span>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="shift-container color-open">
+
+            <div class="shift-upperleft">
+                <b>2:30p - 4:30p</b>
+            </div>
+
+            <div class="shift-upperright">
+                Bonnie Brook
+                &nbsp;
+                <div class="dropdown">
+                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                        <img src="~/images/gear.svg" />
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right">
+                        <li>
+                            <a href="#">Disable</a>
+                        </li>
+                        <li>
+                            <a href="#">Delete</a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="shift-divider color-open"></div>
+
+            <div class="shift-spots">
+
+                <div class="shift-spot">
+                    <button type="button" class="shift-profile color-open">+</button>
+                    <span class="shift-profile-name"></span>
+                </div>
+                <div class="shift-spot">
+                    <button type="button" class="shift-profile color-open">+</button>
+                    <span class="shift-profile-name"></span>
+                </div>
+
+            </div>
+
+        </div>*@
+
+    </div>
+</div>
