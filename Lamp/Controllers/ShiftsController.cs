@@ -155,7 +155,7 @@ namespace Lamp.Controllers
         }
 
         [HttpPost()]
-        public async Task<IActionResult> Edit(ShiftVM shiftModel)
+        public async Task<IActionResult> Edit(EditShiftVM shiftModel)
         {
             // Check that the data is present
             if (!ModelState.IsValid || shiftModel.ShiftId == 0)
